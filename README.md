@@ -6,4 +6,3 @@ This site will be hosted on static servers and be built with React. The files wi
 
 ## Purpose
 Users should be able to view front and back of a tract and have a download button to download the file as a PDF to print.
-
