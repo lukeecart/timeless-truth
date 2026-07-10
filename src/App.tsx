@@ -1,20 +1,28 @@
-import { useState } from "react";
-import { FiFileText, FiSearch } from "react-icons/fi";
-import { IoSnowOutline, IoSunnyOutline, IoGridOutline } from "react-icons/io5";
+import { FiFileText } from "react-icons/fi";
 import "./App.css";
-import { tracts } from "./tractInfo";
+import { useState } from "react";
+
 import { TractCard } from "./components/TractCard";
+import { tracts, type Tract } from "./tractInfo";
+import { FilterTabs } from "./components/filterTabs";
 
-type Category = "all" | "christmas" | "year-round";
-
+export type Category = "all" | "seasonal" | "year-round" | "calendar";
 export default function App() {
   const [activeFilter, setActiveFilter] = useState<Category>("all");
   const [searchQuery, setSearchQuery] = useState("");
 
+  const matchesSearch = (tract: Tract, query: string): boolean => {
+    if (query === "") return true;
+    const lowerQuery = query.toLowerCase();
+    return tract.title.toLowerCase().includes(lowerQuery) ||
+      tract.description.toLowerCase().includes(lowerQuery); // search in description as well
+  };
+
   const filtered = tracts.filter((t) => {
-    const matchesCategory = activeFilter === "all" || t.category === (activeFilter === "christmas" ? "christmas" : "year-round");
-    const matchesSearch = searchQuery === "" || t.title.toLowerCase().includes(searchQuery.toLowerCase()) || t.description.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
+    const matchesCategory = activeFilter === "all" || t.category === activeFilter;
+    const matchesQuery = matchesSearch(t, searchQuery);
+
+    return matchesCategory && matchesQuery;
   });
 
   return (
@@ -52,53 +60,13 @@ export default function App() {
         </div>
       </section>
 
-      {/* Filter bar */}
-      <div className="border-b border-border sticky top-16 z-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 bg-card">
-          <div className="flex flex-col gap-3 py-4">
-            {/* Category tabs */}
-            <div className="flex flex-wrap gap-1 p-1 bg-muted rounded-sm w-full sm:w-auto">
-              {(["all", "christmas", "year-round"] as Category[]).map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setActiveFilter(cat)}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-[3px] text-sm font-medium transition-all duration-150 cursor-pointer whitespace-nowrap ${activeFilter === cat
-                      ? cat === "christmas"
-                        ? "bg-accent text-accent-foreground shadow-sm"
-                        : "bg-primary text-primary-foreground shadow-sm"
-                      : "text-muted-foreground hover:text-foreground"
-                    }`}
-
-                >
-                  {cat === "christmas" && <IoSnowOutline size={12} />}
-                  {cat === "year-round" && <IoSunnyOutline size={12} />}
-                  {cat === "all" && <IoGridOutline size={12} />}
-                  {cat === "all" ? "All tracts" : cat === "christmas" ? "Christmas" : "All year round"}
-                </button>
-              ))}
-              
-            {/* Search */}
-            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
-              <div className="relative w-full sm:flex-1 sm:max-w-xs">
-                <FiSearch size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
-                <input
-                  type="text"
-                  placeholder="Search tracts..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-card border border-border text-foreground placeholder:text-muted-foreground text-sm pl-9 pr-3 py-2 rounded-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                />
-              </div>
-
-              <div className="text-muted-foreground text-sm font-mono shrink-0">
-                {filtered.length} result{filtered.length !== 1 ? "s" : ""}
-              </div>
-            </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
+      <FilterTabs
+        activeFilter={activeFilter}
+        setActiveFilter={setActiveFilter}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        filtered={filtered}
+      />
 
       {/* Content */}
       <main className="flex-1 w-full max-w-7xl mx-auto px-6 py-10">
@@ -131,7 +99,7 @@ export default function App() {
             <span className="text-sm font-semibold text-foreground font-display">Timeless truth</span>
           </div>
           <p className="text-muted-foreground text-xs">
-            All tracts are free to download and distribute.
+            All tracts are free to download and distribute. The main text should not be edited or changed in any way.
           </p>
           <p className="text-muted-foreground text-xs font-mono">
             &copy; {new Date().getFullYear()} Timeless truth. All rights reserved.

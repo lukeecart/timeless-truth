@@ -1,5 +1,6 @@
 import { FiDownload } from "react-icons/fi";
 import type { Tract } from "../tractInfo";
+import { CategoryBadge } from "./categoryBadge";
 
 export function TractCard({ tract }: { tract: Tract }) {
 
@@ -10,18 +11,23 @@ export function TractCard({ tract }: { tract: Tract }) {
 		link.click();
 	};
 
+	const getCategoryLabel = (category: string) => {
+		switch (category) {
+			case "seasonal":
+				return (CategoryBadge({ label: "Seasonal", bgColor: "bg-accent", textColor: "text-accent-foreground" }))
+			case "year-round":
+				return (CategoryBadge({ label: "All year round", bgColor: "bg-primary", textColor: "text-primary-foreground" }))
+			case "calendar":
+				return (CategoryBadge({ label: "Calendars", bgColor: "bg-blue-500", textColor: "text-white" }))
+			default:
+				return category;
+		}
+	};
+
 	return (
 		<article className="bg-card rounded-sm overflow-hidden border border-border group flex flex-col transition-shadow duration-200 hover:shadow-lg hover:shadow-black/8 relative">
 			<div className="absolute top-3 right-3 z-10">
-				{tract.category === "christmas" ? (
-					<span className="inline-flex items-center gap-1 rounded-full bg-accent px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-accent-foreground shadow-sm">
-						Christmas
-					</span>
-				) : (
-					<span className="inline-flex items-center gap-1 rounded-full bg-primary px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-primary-foreground shadow-sm">
-						All year round
-					</span>
-				)}
+				{getCategoryLabel(tract.category)}
 			</div>
 			<div className="relative overflow-hidden aspect-3/2 bg-muted">
 				<img
