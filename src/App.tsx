@@ -3,13 +3,15 @@ import "./App.css";
 import { useState } from "react";
 
 import { TractCard } from "./components/TractCard";
-import { tracts, type Tract } from "./tractInfo";
 import { FilterTabs } from "./components/filterTabs";
+import type { Tract } from "./tractInfo";
+import { useTracts } from "./hooks/useTracts";
 
 export type Category = "all" | "seasonal" | "year-round" | "calendar";
 export default function App() {
   const [activeFilter, setActiveFilter] = useState<Category>("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const tractArray = useTracts();
 
   const matchesSearch = (tract: Tract, query: string): boolean => {
     if (query === "") return true;
@@ -18,7 +20,7 @@ export default function App() {
       tract.description.toLowerCase().includes(lowerQuery); // search in description as well
   };
 
-  const filtered = tracts.filter((t) => {
+  const filtered = tractArray.filter((t) => {
     const matchesCategory = activeFilter === "all" || t.category === activeFilter;
     const matchesQuery = matchesSearch(t, searchQuery);
 
