@@ -40,6 +40,11 @@ export default function App() {
               </span>
             </div>
           </div>
+          <nav className="flex items-center gap-4">
+            <a href="#contact" className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors">
+              Contact Us
+            </a>
+          </nav>
         </div>
       </header>
 
@@ -87,10 +92,24 @@ export default function App() {
             </section>
           </div>
         )}
+
+        <section id="contact" className="bg-primary text-primary-foreground py-14 px-6 mt-16">
+          <div className="max-w-7xl mx-auto text-center">
+            <h2 className="text-3xl font-bold mb-4 font-display">Contact Us</h2>
+            <p className="text-lg mb-6 text-primary-foreground/75">
+              Do you have any questions? Reach out to us at:
+            </p>
+            <a href="mailto:contact@timelesstruth.co.uk" className="text-lg font-semibold underline">
+              contact@timelesstruth.co.uk
+            </a>
+          </div>
+        </section>
       </main>
 
+
+
       {/* Footer */}
-      <footer className="border-t border-border mt-16 py-8 px-6 bg-card">
+      <footer className="border-t border-border py-8 px-6 bg-card">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <div className="w-5 h-5 bg-primary rounded-sm flex items-center justify-center">
