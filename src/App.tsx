@@ -4,14 +4,14 @@ import { useState } from "react";
 
 import { TractCard } from "./components/TractCard";
 import { FilterTabs } from "./components/filterTabs";
-import type { Tract } from "./tractInfo";
+import type { Tract } from "./tract";
 import { useTracts } from "./hooks/useTracts";
 
 export type Category = "all" | "seasonal" | "year-round" | "calendar";
 export default function App() {
   const [activeFilter, setActiveFilter] = useState<Category>("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const tractArray = useTracts();
+  const { tracts: tractArray } = useTracts();
 
   const matchesSearch = (tract: Tract, query: string): boolean => {
     if (query === "") return true;
@@ -101,8 +101,8 @@ export default function App() {
             <p className="text-lg mb-6 text-primary-foreground/75">
               Do you have any questions? Reach out to us at:
             </p>
-            <a href="mailto:contact@timelesstruth.co.uk" className="text-lg font-semibold underline">
-              contact@timelesstruth.co.uk
+            <a href="mailto:timelesstruth@mail.com" className="text-lg font-semibold underline">
+              timelesstruth@mail.com
             </a>
           </div>
         </section>
