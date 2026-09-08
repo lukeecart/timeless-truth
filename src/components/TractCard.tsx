@@ -21,11 +21,13 @@ export function TractCard({ tract }: { tract: Tract }) {
 		setIsPreviewOpen(false);
 	};
 
-	const getCategoryLabel = (category: string) => {
+	type Category = "seasonal" | "yearRound" | "calendar";
+
+	const getCategoryLabel = (category: Category) => {
 		switch (category) {
 			case "seasonal":
 				return (CategoryBadge({ label: "Seasonal", bgColor: "bg-accent", textColor: "text-accent-foreground" }))
-			case "year-round":
+			case "yearRound":
 				return (CategoryBadge({ label: "All year round", bgColor: "bg-primary", textColor: "text-primary-foreground" }))
 			case "calendar":
 				return (CategoryBadge({ label: "Calendars", bgColor: "bg-blue-500", textColor: "text-white" }))
